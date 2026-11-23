@@ -2,9 +2,9 @@
 
 <div align="center">
 
-## 🌐 [Live Demo → forensic-vault.onrender.com](https://forensic-vault.onrender.com)
+## 🌐 [▶ Live Demo — Click to Open](https://forensicvault.replit.app)
 
-> **Login:** `admin` / `admin123`
+> **Login with:** Username: `admin` &nbsp;|&nbsp; Password: `admin123`
 
 ---
 
@@ -12,13 +12,10 @@
 <img src="https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white" />
 <img src="https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white" />
 <img src="https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white" />
-<img src="https://img.shields.io/badge/Deployed%20on-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white" />
 
 **A professional Digital Evidence Management System built with Python & Flask.**
 
-[🚀 Features](#-features) · [⚙️ Installation](#️-installation) · [🗂️ Project Structure](#️-project-structure) · [📖 How It Works](#-how-it-works) · [☁️ Deploy](#️-deploy-your-own)
-
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Jobel26093/Forensic---Valut-)
+[🚀 Features](#-features) · [⚙️ Installation](#️-installation) · [🗂️ Project Structure](#️-project-structure) · [📖 How It Works](#-how-it-works)
 
 </div>
 
@@ -98,18 +95,18 @@ http://127.0.0.1:5000
 
 ---
 
-## ☁️ Deploy Your Own
+## ▶️ Run the Live Demo
 
-### One-click deploy on Render (free, permanent URL)
+The demo is hosted on **Replit** — no installation needed. Just open the link and log in:
 
-1. Click the button below  
-2. Connect your GitHub account  
-3. Use service name **`forensic-vault`** → your URL will be `https://forensic-vault.onrender.com`  
-4. Click **Deploy** — done! ✅
+🔗 **[https://forensicvault.replit.app](https://forensicvault.replit.app)**
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Jobel26093/Forensic---Valut-)
+| Field | Value |
+|-------|-------|
+| Username | `admin` |
+| Password | `admin123` |
 
-> The URL **never changes** even when you push code updates — Render redeploys automatically on every `git push`.
+> The demo link is **permanent** — it stays the same even when the project is updated.
 
 ---
 
