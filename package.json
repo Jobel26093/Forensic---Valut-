@@ -1,0 +1,10 @@
+{
+  "name": "forensic-project",
+  "version": "1.0.0",
+  "description": "ForensicVault - Digital Evidence Management (Python/Flask backend)",
+  "private": true,
+  "scripts": {
+    "dev": "python app.py",
+    "start": "python app.py"
+  }
+}

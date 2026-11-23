@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<!-- Header -->
+<div style="margin-bottom:2rem">
+    <div class="d-flex align-items-center justify-content-between">
+        <div>
+            <div class="pill-tag mb-2"><i class="bi bi-circle-fill" style="font-size:.45rem;color:#1d8348"></i> System Online</div>
+            <h1 class="page-title">{{ greeting }}, {{ session.get("user","Analyst") }}.</h1>
+            <p class="page-subtitle">Here's your forensics command center overview.</p>
+        </div>
+        <a href="/report" class="btn-black">
+            <i class="bi bi-file-earmark-pdf"></i> Export Report
+        </a>
+    </div>
+</div>
+
+<!-- Stats -->
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-lg-3">
+        <div class="stat-box">
+            <div class="stat-icon"><i class="bi bi-files"></i></div>
+            <div class="stat-num">{{ total_files }}</div>
+            <div class="stat-label">Evidence Files</div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="stat-box">
+            <div class="stat-icon"><i class="bi bi-hdd"></i></div>
+            <div class="stat-num" style="font-size:1.3rem;padding-top:.3rem">{{ total_size }}</div>
+            <div class="stat-label">Total Stored Size</div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="stat-box">
+            <div class="stat-icon"><i class="bi bi-fingerprint"></i></div>
+            <div class="stat-num">3</div>
+            <div class="stat-label">Hash Types (MD5, SHA-1, SHA-256)</div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="stat-box">
+            <div class="stat-icon"><i class="bi bi-clock-history"></i></div>
+            <div class="stat-num" style="font-size:.85rem;padding-top:.5rem;font-weight:600;letter-spacing:0">
+                {{ last_upload or '—' }}
+            </div>
+            <div class="stat-label">Last Upload</div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div style="margin-bottom:2rem">
+    <div class="section-label">Quick Actions</div>
+    <div class="row g-3">
+        <div class="col-sm-6 col-lg-3">
+            <a href="/upload" class="action-card">
+                <div class="action-icon"><i class="bi bi-cloud-upload"></i></div>
+                <div style="font-weight:600;font-size:.9rem;color:#111;margin-bottom:.25rem">Upload Evidence</div>
+                <div style="font-size:.78rem;color:#6e6e73">Hash &amp; store a file securely</div>
+                <div style="margin-top:.9rem;font-size:.75rem;color:#aeaeb2;display:flex;align-items:center;gap:.3rem">
+                    Go <i class="bi bi-arrow-right" style="font-size:.65rem"></i>
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <a href="/verify" class="action-card">
+                <div class="action-icon"><i class="bi bi-patch-check"></i></div>
+                <div style="font-weight:600;font-size:.9rem;color:#111;margin-bottom:.25rem">Verify Integrity</div>
+                <div style="font-size:.78rem;color:#6e6e73">Detect tampering in a file</div>
+                <div style="margin-top:.9rem;font-size:.75rem;color:#aeaeb2;display:flex;align-items:center;gap:.3rem">
+                    Go <i class="bi bi-arrow-right" style="font-size:.65rem"></i>
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <a href="/fingerprint" class="action-card">
+                <div class="action-icon"><i class="bi bi-fingerprint"></i></div>
+                <div style="font-weight:600;font-size:.9rem;color:#111;margin-bottom:.25rem">File Fingerprint</div>
+                <div style="font-size:.78rem;color:#6e6e73">MD5 / SHA-1 / SHA-256 hashes</div>
+                <div style="margin-top:.9rem;font-size:.75rem;color:#aeaeb2;display:flex;align-items:center;gap:.3rem">
+                    Go <i class="bi bi-arrow-right" style="font-size:.65rem"></i>
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <a href="/logs" class="action-card">
+                <div class="action-icon"><i class="bi bi-journal-text"></i></div>
+                <div style="font-weight:600;font-size:.9rem;color:#111;margin-bottom:.25rem">Evidence Logs</div>
+                <div style="font-size:.78rem;color:#6e6e73">Full audit trail &amp; records</div>
+                <div style="margin-top:.9rem;font-size:.75rem;color:#aeaeb2;display:flex;align-items:center;gap:.3rem">
+                    Go <i class="bi bi-arrow-right" style="font-size:.65rem"></i>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Info Bar -->
+<div class="card-filled d-flex align-items-center gap-3" style="padding:1rem 1.5rem">
+    <i class="bi bi-info-circle" style="color:#6e6e73"></i>
+    <span style="font-size:.82rem;color:#6e6e73">
+        Any change to an uploaded file — even a single byte — produces a completely different hash, making tampering immediately detectable.
+    </span>
+</div>
+
+{% endblock %}

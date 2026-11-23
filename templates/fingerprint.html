@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}File Fingerprint{% endblock %}
+
+{% block content %}
+
+<div style="max-width:900px">
+    <div style="margin-bottom:2rem">
+        <h1 class="page-title">File Fingerprint</h1>
+        <p class="page-subtitle">Generate MD5, SHA-1, and SHA-256 hashes for any file simultaneously.</p>
+    </div>
+
+    <div class="row g-4">
+        <!-- Upload -->
+        <div class="col-lg-5">
+            <div class="card-w">
+                <form method="POST" enctype="multipart/form-data" id="fpForm">
+                    <div class="upload-zone" onclick="document.getElementById('fpInput').click()">
+                        <div class="upload-icon-wrap">
+                            <i class="bi bi-fingerprint"></i>
+                        </div>
+                        <div style="font-weight:600;font-size:.9rem;color:#111;margin-bottom:.35rem">
+                            Select file to fingerprint
+                        </div>
+                        <div class="file-label" style="font-size:.82rem;color:#aeaeb2">or click to browse</div>
+                        <input type="file" name="file" id="fpInput" required style="display:none">
+                    </div>
+
+                    <hr class="divider">
+                    <button type="submit" class="btn-black" id="fpBtn">
+                        <i class="bi bi-fingerprint"></i> Generate Fingerprint
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Results -->
+        <div class="col-lg-7">
+            {% if file_info %}
+            <div class="card-w">
+                <!-- File info header -->
+                <div style="display:flex;align-items:center;gap:.75rem;padding-bottom:1rem;border-bottom:1px solid #e5e5e5;margin-bottom:1.25rem">
+                    <div style="width:40px;height:40px;background:#f5f5f7;border:1px solid #e5e5e5;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:.95rem;color:#6e6e73;flex-shrink:0">
+                        <i class="bi bi-file-earmark-binary"></i>
+                    </div>
+                    <div style="flex:1;min-width:0">
+                        <div style="font-weight:700;font-size:.9rem;color:#111;word-break:break-all">{{ file_info.name }}</div>
+                        <div style="font-size:.78rem;color:#aeaeb2;margin-top:.1rem">
+                            {{ file_info.size_fmt }}
+                            {% if file_info.ext %} · <span style="text-transform:uppercase">{{ file_info.ext }}</span>{% endif %}
+                        </div>
+                    </div>
+                    <!-- Copy all button -->
+                    <button class="copy-btn" id="copyAllBtn" onclick="copyAllHashes()" style="flex-shrink:0;padding:.3rem .65rem">
+                        <i class="bi bi-clipboard-check"></i> Copy All
+                    </button>
+                </div>
+
+                <!-- Hashes -->
+                {% for label, value in [('MD5', file_info.md5), ('SHA-1', file_info.sha1), ('SHA-256', file_info.sha256)] %}
+                <div style="margin-bottom:1rem">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem">
+                        <span style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#aeaeb2">{{ label }}</span>
+                        <button class="copy-btn" onclick="copyText('{{ value }}', this)">
+                            <i class="bi bi-clipboard"></i> Copy
+                        </button>
+                    </div>
+                    <div style="background:#f5f5f7;border:1px solid #e5e5e5;border-radius:9px;padding:.6rem .9rem;font-family:'JetBrains Mono',monospace;font-size:.75rem;color:#111;word-break:break-all;letter-spacing:.02em">
+                        {{ value }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            {% else %}
+            <div class="card-filled d-flex flex-column align-items-center justify-content-center" style="min-height:280px">
+                <i class="bi bi-fingerprint" style="font-size:2.5rem;color:#d1d5db;display:block;margin-bottom:.75rem"></i>
+                <div style="font-size:.875rem;color:#aeaeb2;font-weight:500">Results will appear here</div>
+                <div style="font-size:.78rem;color:#d1d5db;margin-top:.25rem">Upload a file to generate its hashes</div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('fpForm').addEventListener('submit', function() {
+    const btn = document.getElementById('fpBtn');
+    if (btn) {
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" style="width:.85rem;height:.85rem;border-width:2px"></span> Computing...';
+        btn.disabled = true;
+    }
+});
+
+function copyAllHashes() {
+    const md5    = "{{ file_info.md5    if file_info else '' }}";
+    const sha1   = "{{ file_info.sha1   if file_info else '' }}";
+    const sha256 = "{{ file_info.sha256 if file_info else '' }}";
+    const name   = "{{ file_info.name   if file_info else '' }}";
+    const text   = `File: ${name}\nMD5:    ${md5}\nSHA-1:  ${sha1}\nSHA-256:${sha256}`;
+    const btn    = document.getElementById('copyAllBtn');
+    navigator.clipboard.writeText(text).then(() => {
+        btn.innerHTML = '<i class="bi bi-check2"></i> Copied!';
+        setTimeout(() => btn.innerHTML = '<i class="bi bi-clipboard-check"></i> Copy All', 1800);
+    });
+}
+</script>
+{% endblock %}

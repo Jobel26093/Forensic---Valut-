@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block title %}Upload Evidence{% endblock %}
+
+{% block content %}
+
+<div style="max-width:760px">
+    <div style="margin-bottom:2rem">
+        <h1 class="page-title">Upload Evidence</h1>
+        <p class="page-subtitle">Upload a file — its SHA-256 hash will be computed and stored in the evidence chain.</p>
+    </div>
+
+    <div class="card-w" style="margin-bottom:1.5rem">
+        <form method="POST" enctype="multipart/form-data" id="uploadForm">
+            <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+                <div class="upload-icon-wrap">
+                    <i class="bi bi-cloud-arrow-up" id="zoneIcon"></i>
+                </div>
+                <div style="font-weight:600;font-size:.9rem;color:#111;margin-bottom:.35rem">
+                    Drag &amp; drop your file here
+                </div>
+                <div class="file-label" style="font-size:.82rem;color:#aeaeb2">
+                    or click to browse
+                </div>
+                <input type="file" name="file" id="fileInput" required style="display:none">
+            </div>
+
+            <!-- File preview (shown after selection) -->
+            <div id="filePreview" style="display:none;margin-top:1rem;padding:.85rem 1rem;background:#f5f5f7;border:1px solid #e5e5e5;border-radius:10px;display:none;align-items:center;gap:.75rem">
+                <i class="bi bi-file-earmark" id="previewIcon" style="font-size:1.3rem;color:#6e6e73;flex-shrink:0"></i>
+                <div style="flex:1;min-width:0">
+                    <div id="previewName" style="font-weight:600;font-size:.85rem;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
+                    <div id="previewSize" style="font-size:.75rem;color:#aeaeb2;margin-top:.1rem"></div>
+                </div>
+                <i class="bi bi-check-circle-fill" style="color:#1d8348;font-size:1rem;flex-shrink:0"></i>
+            </div>
+
+            <hr class="divider">
+
+            <div class="d-flex gap-2 align-items-center">
+                <button type="submit" class="btn-black" id="submitBtn">
+                    <i class="bi bi-shield-plus"></i> Upload &amp; Hash
+                </button>
+                <button type="button" class="btn-outline" id="clearBtn">
+                    <i class="bi bi-x"></i> Clear
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- How it works -->
+    <div class="section-label">How it works</div>
+    <div class="card-filled">
+        <div class="d-flex flex-column gap-3">
+            <div class="step">
+                <div class="step-num">1</div>
+                <div>
+                    <div class="step-title">File Stored</div>
+                    <div class="step-desc">Saved to the secure uploads directory on the server.</div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div>
+                    <div class="step-title">SHA-256 Computed</div>
+                    <div class="step-desc">A cryptographic hash is generated from the raw bytes of the file.</div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div>
+                    <div class="step-title">Record Created</div>
+                    <div class="step-desc">The filename, size, type, hash, and timestamp are logged to the forensic database.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+const fileInput   = document.getElementById('fileInput');
+const filePreview = document.getElementById('filePreview');
+const previewName = document.getElementById('previewName');
+const previewSize = document.getElementById('previewSize');
+const fileLbl     = document.querySelector('.file-label');
+
+function formatBytes(b) {
+    if (b < 1024) return b + ' B';
+    if (b < 1048576) return (b/1024).toFixed(1) + ' KB';
+    return (b/1048576).toFixed(2) + ' MB';
+}
+
+fileInput.addEventListener('change', function() {
+    if (this.files.length) {
+        const f = this.files[0];
+        fileLbl.textContent = f.name;
+        previewName.textContent = f.name;
+        previewSize.textContent = formatBytes(f.size) + ' · ' + (f.name.split('.').pop().toUpperCase() || 'FILE');
+        filePreview.style.display = 'flex';
+    }
+});
+
+document.getElementById('clearBtn').addEventListener('click', function() {
+    fileInput.value = '';
+    fileLbl.textContent = 'or click to browse';
+    filePreview.style.display = 'none';
+});
+
+document.getElementById('uploadForm').addEventListener('submit', function() {
+    const btn = document.getElementById('submitBtn');
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" style="width:.85rem;height:.85rem;border-width:2px"></span> Uploading...';
+    btn.disabled = true;
+});
+</script>
+{% endblock %}

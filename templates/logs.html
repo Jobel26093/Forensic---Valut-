@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% block title %}Evidence Logs{% endblock %}
+
+{% block content %}
+
+<div style="margin-bottom:2rem;display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap">
+    <div>
+        <h1 class="page-title">Evidence Logs</h1>
+        <p class="page-subtitle">Complete audit trail of all uploaded files and their cryptographic hashes.</p>
+    </div>
+    <div class="d-flex gap-2 align-items-center" style="flex-wrap:wrap">
+        <div style="position:relative">
+            <i class="bi bi-search" style="position:absolute;left:.75rem;top:50%;transform:translateY(-50%);color:#aeaeb2;font-size:.82rem;pointer-events:none"></i>
+            <input type="text" id="searchInput" class="input-field" style="padding-left:2.1rem;width:200px;font-size:.82rem" placeholder="Search logs..." oninput="filterTable(this.value)">
+        </div>
+        <a href="/report" class="btn-black" style="text-decoration:none">
+            <i class="bi bi-file-earmark-pdf"></i> Export PDF
+        </a>
+    </div>
+</div>
+
+<div class="card-w" style="padding:0;overflow:hidden">
+
+    <!-- Table meta bar -->
+    <div style="padding:.85rem 1.25rem;border-bottom:1px solid #e5e5e5;display:flex;align-items:center;justify-content:space-between;background:#f5f5f7">
+        <span style="font-size:.78rem;font-weight:600;color:#6e6e73">
+            {{ records|length }} record{{ 's' if records|length != 1 }}
+        </span>
+        <div style="display:flex;align-items:center;gap:.4rem">
+            <span style="width:7px;height:7px;background:#1d8348;border-radius:50%;display:inline-block"></span>
+            <span style="font-size:.72rem;color:#1d8348;font-weight:600">Live</span>
+        </div>
+    </div>
+
+    {% if records %}
+    <div style="overflow-x:auto">
+        <table class="data-table" id="logsTable">
+            <thead>
+                <tr>
+                    <th style="width:56px">#</th>
+                    <th>Filename</th>
+                    <th>SHA-256 Hash</th>
+                    <th>Size</th>
+                    <th>Uploaded At</th>
+                    <th style="width:90px;text-align:center">Status</th>
+                    <th style="width:70px;text-align:center">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in records %}
+                {# row: id, filename, hash, upload_time, file_size, file_type, size_fmt #}
+                {% set ext = row[5]|lower if row[5] else 'file' %}
+                {% if ext in ['pdf'] %}
+                    {% set icon = 'bi-file-earmark-pdf' %}
+                {% elif ext in ['jpg','jpeg','png','gif','bmp','webp','svg'] %}
+                    {% set icon = 'bi-file-earmark-image' %}
+                {% elif ext in ['mp4','avi','mov','mkv','wmv'] %}
+                    {% set icon = 'bi-file-earmark-play' %}
+                {% elif ext in ['mp3','wav','aac','flac'] %}
+                    {% set icon = 'bi-file-earmark-music' %}
+                {% elif ext in ['zip','rar','7z','tar','gz'] %}
+                    {% set icon = 'bi-file-earmark-zip' %}
+                {% elif ext in ['py','js','html','css','json','xml','sh','bat','c','cpp','java'] %}
+                    {% set icon = 'bi-file-earmark-code' %}
+                {% elif ext in ['txt','log','md','csv'] %}
+                    {% set icon = 'bi-file-earmark-text' %}
+                {% elif ext in ['doc','docx','xls','xlsx','ppt','pptx'] %}
+                    {% set icon = 'bi-file-earmark-richtext' %}
+                {% else %}
+                    {% set icon = 'bi-file-earmark-binary' %}
+                {% endif %}
+                <tr>
+                    <td><span class="badge-black">{{ row[0] }}</span></td>
+                    <td>
+                        <div style="display:flex;align-items:center;gap:.5rem">
+                            <i class="bi {{ icon }}" style="color:#aeaeb2;font-size:.95rem;flex-shrink:0"></i>
+                            <div>
+                                <div style="font-weight:500;color:#111;font-size:.85rem">{{ row[1] }}</div>
+                                {% if row[5] %}
+                                <div style="font-size:.7rem;color:#aeaeb2;text-transform:uppercase;letter-spacing:.04em">{{ row[5] }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div style="display:flex;align-items:center;gap:.5rem">
+                            <span class="hash-mono">{{ row[2][:24] }}…</span>
+                            <button class="copy-btn" onclick="copyText('{{ row[2] }}', this)" title="Copy full hash">
+                                <i class="bi bi-clipboard"></i> Copy
+                            </button>
+                        </div>
+                    </td>
+                    <td>
+                        <span style="font-size:.8rem;color:#6e6e73;white-space:nowrap">{{ row[6] }}</span>
+                    </td>
+                    <td>
+                        <span style="font-size:.82rem;color:#6e6e73;white-space:nowrap">{{ row[3] }}</span>
+                    </td>
+                    <td style="text-align:center">
+                        <span style="display:inline-flex;align-items:center;gap:.3rem;background:#eafaf1;color:#1d8348;border:1px solid #a9dfbf;border-radius:6px;padding:.2rem .55rem;font-size:.72rem;font-weight:600;white-space:nowrap;line-height:1.4">
+                            <i class="bi bi-check2" style="font-size:.7rem"></i>Stored
+                        </span>
+                    </td>
+                    <td style="text-align:center">
+                        <form method="POST" action="/delete/{{ row[0] }}" onsubmit="return confirm('Delete record #{{ row[0] }} ({{ row[1] }})? This cannot be undone.')">
+                            <button type="submit" title="Delete record" style="background:none;border:1px solid #e5e5e5;border-radius:6px;color:#aeaeb2;padding:.2rem .45rem;cursor:pointer;font-size:.78rem;transition:all .15s" onmouseover="this.style.borderColor='#c0392b';this.style.color='#c0392b'" onmouseout="this.style.borderColor='#e5e5e5';this.style.color='#aeaeb2'">
+                                <i class="bi bi-trash3"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div style="text-align:center;padding:3.5rem 2rem">
+        <i class="bi bi-inbox" style="font-size:2.5rem;color:#d1d5db;display:block;margin-bottom:.75rem"></i>
+        <div style="font-size:.9rem;color:#6e6e73;font-weight:500;margin-bottom:.4rem">No records yet</div>
+        <a href="/upload" style="font-size:.82rem;color:#111;text-decoration:underline;text-underline-offset:3px">
+            Upload your first file →
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+function filterTable(query) {
+    const q = query.toLowerCase();
+    document.querySelectorAll('#logsTable tbody tr').forEach(row => {
+        row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+    });
+}
+</script>
+{% endblock %}

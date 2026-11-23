@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}Verify Integrity{% endblock %}
+
+{% block content %}
+
+<div style="max-width:760px">
+    <div style="margin-bottom:2rem">
+        <h1 class="page-title">Verify File Integrity</h1>
+        <p class="page-subtitle">Re-upload a file to check if it matches the stored hash and detect any tampering.</p>
+    </div>
+
+    <div class="card-w" style="margin-bottom:1.5rem">
+        <form method="POST" enctype="multipart/form-data">
+            <div class="upload-zone" onclick="document.getElementById('vFile').click()">
+                <div class="upload-icon-wrap">
+                    <i class="bi bi-patch-question"></i>
+                </div>
+                <div style="font-weight:600;font-size:.9rem;color:#111;margin-bottom:.35rem">
+                    Drop file to verify
+                </div>
+                <div class="file-label" style="font-size:.82rem;color:#aeaeb2">or click to browse</div>
+                <input type="file" name="file" id="vFile" required style="display:none">
+            </div>
+
+            {% if result %}
+            <div class="mt-3
+                {% if result_type == 'authentic' %}alert-success-w
+                {% elif result_type == 'modified' %}alert-danger-w
+                {% else %}alert-warning-w{% endif %}
+                d-flex gap-3 align-items-start">
+                <i class="bi
+                    {% if result_type == 'authentic' %}bi-check-circle-fill
+                    {% elif result_type == 'modified' %}bi-x-circle-fill
+                    {% else %}bi-question-circle-fill{% endif %}"
+                    style="font-size:1.3rem;margin-top:.05rem;flex-shrink:0"></i>
+                <div style="flex:1">
+                    <div style="font-weight:700;font-size:.9rem">{{ result }}</div>
+                    <div style="font-size:.8rem;opacity:.85;margin-top:.2rem">
+                        {% if result_type == 'authentic' %}The file hash matches the stored record — no tampering detected.
+                        {% elif result_type == 'modified' %}Hash mismatch — this file may have been altered since it was uploaded.
+                        {% else %}No prior record found for this filename in the database.{% endif %}
+                    </div>
+                    {% if verified_hash %}
+                    <div style="margin-top:.65rem;display:flex;align-items:center;gap:.5rem">
+                        <span style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;opacity:.7">Computed hash:</span>
+                        <span style="font-family:'JetBrains Mono',monospace;font-size:.72rem;opacity:.8">{{ verified_hash[:32] }}…</span>
+                        <button class="copy-btn" type="button" onclick="copyText('{{ verified_hash }}', this)" style="opacity:.8">
+                            <i class="bi bi-clipboard"></i> Copy
+                        </button>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <hr class="divider">
+            <button type="submit" class="btn-black">
+                <i class="bi bi-shield-check"></i> Verify File
+            </button>
+        </form>
+    </div>
+
+    <!-- Result guide -->
+    <div class="row g-3">
+        <div class="col-sm-4">
+            <div class="card-filled text-center" style="padding:1.25rem">
+                <i class="bi bi-check-circle-fill" style="font-size:1.6rem;color:#1d8348;display:block;margin-bottom:.5rem"></i>
+                <div style="font-weight:700;font-size:.85rem;color:#111">Authentic</div>
+                <div style="font-size:.75rem;color:#6e6e73;margin-top:.2rem">Hash matches — file is intact</div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="card-filled text-center" style="padding:1.25rem">
+                <i class="bi bi-x-circle-fill" style="font-size:1.6rem;color:#c0392b;display:block;margin-bottom:.5rem"></i>
+                <div style="font-weight:700;font-size:.85rem;color:#111">Modified</div>
+                <div style="font-size:.75rem;color:#6e6e73;margin-top:.2rem">Mismatch — possible tampering</div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="card-filled text-center" style="padding:1.25rem">
+                <i class="bi bi-question-circle-fill" style="font-size:1.6rem;color:#9a7d0a;display:block;margin-bottom:.5rem"></i>
+                <div style="font-weight:700;font-size:.85rem;color:#111">Not Found</div>
+                <div style="font-size:.75rem;color:#6e6e73;margin-top:.2rem">No record for this filename</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
