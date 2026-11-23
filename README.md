@@ -2,7 +2,7 @@
 
 <div align="center">
 
-## 🌐 [▶ Live Demo — Click Here to Open](https://jobel26093.github.io/Forensic---Valut-/)
+## 🌐 Live Demo : https://jobel26093.github.io/Forensic---Valut-/
 
 > **Demo Credentials:** Username: `admin` &nbsp;|&nbsp; Password: `admin123` *(or click Instant Demo Sign In)*
 
