@@ -2,14 +2,23 @@
 
 <div align="center">
 
+## 🌐 [Live Demo → forensic-vault.onrender.com](https://forensic-vault.onrender.com)
+
+> **Login:** `admin` / `admin123`
+
+---
+
 <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" />
 <img src="https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white" />
 <img src="https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white" />
 <img src="https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white" />
+<img src="https://img.shields.io/badge/Deployed%20on-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white" />
 
 **A professional Digital Evidence Management System built with Python & Flask.**
 
-[🚀 Features](#-features) · [📸 Screenshots](#-screenshots) · [⚙️ Installation](#️-installation) · [🗂️ Project Structure](#️-project-structure) · [📖 How It Works](#-how-it-works)
+[🚀 Features](#-features) · [⚙️ Installation](#️-installation) · [🗂️ Project Structure](#️-project-structure) · [📖 How It Works](#-how-it-works) · [☁️ Deploy](#️-deploy-your-own)
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Jobel26093/Forensic---Valut-)
 
 </div>
 
@@ -41,12 +50,6 @@
 | 📄 **PDF Report** | Professional forensics report export via ReportLab |
 | 🔔 **Toast Notifications** | Real-time success/error feedback on every action |
 | 🗑️ **Record Management** | Delete evidence records with confirmation |
-
----
-
-## 📸 Screenshots
-
-> Login page, Dashboard, Evidence Logs, Fingerprint tool — clean white & black professional UI.
 
 ---
 
@@ -95,14 +98,30 @@ http://127.0.0.1:5000
 
 ---
 
+## ☁️ Deploy Your Own
+
+### One-click deploy on Render (free, permanent URL)
+
+1. Click the button below  
+2. Connect your GitHub account  
+3. Use service name **`forensic-vault`** → your URL will be `https://forensic-vault.onrender.com`  
+4. Click **Deploy** — done! ✅
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Jobel26093/Forensic---Valut-)
+
+> The URL **never changes** even when you push code updates — Render redeploys automatically on every `git push`.
+
+---
+
 ## 🗂️ Project Structure
 
 ```
 forensic_project/
 │
 ├── app.py                  # Main Flask app — all routes and logic
-├── requirements.txt        # Python dependencies
-├── forensic.db             # SQLite database (auto-created on first run)
+├── requirements.txt        # Python dependencies (flask, reportlab, gunicorn)
+├── Procfile                # Render/Heroku process definition
+├── render.yaml             # Render deployment config
 ├── package.json            # npm shim (optional — runs python app.py)
 │
 ├── uploads/                # Uploaded evidence files
@@ -190,8 +209,10 @@ CREATE TABLE users (
 | Database | SQLite |
 | Hashing | Python `hashlib` |
 | PDF Generation | ReportLab |
+| Server (prod) | Gunicorn |
 | Frontend | Jinja2 + Bootstrap 5 + Bootstrap Icons |
 | Fonts | Inter (UI) · JetBrains Mono (hashes) |
+| Hosting | Render (free tier) |
 
 ---
 
@@ -203,7 +224,7 @@ CREATE TABLE users (
 - 🔐 Load `secret_key` from environment variable, not hardcoded
 - 📂 Validate and restrict uploaded file types
 - 🚫 Set `debug=False` in production
-- 🗃️ Migrate to PostgreSQL for multi-user, high-volume use
+- 🗃️ Migrate to PostgreSQL for persistent storage on Render
 
 ---
 
@@ -214,5 +235,5 @@ This project is for educational and demonstration purposes.
 ---
 
 <div align="center">
-Built with ❤️ using Python & Flask
+Built with ❤️ using Python & Flask · Hosted on Render
 </div>
