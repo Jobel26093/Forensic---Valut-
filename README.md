@@ -2,9 +2,9 @@
 
 <div align="center">
 
-## 🌐 [▶ Live Demo — Click to Open](https://forensicvault.replit.app)
+## 🌐 [▶ Live Demo — Click Here to Open](https://jobel26093.github.io/Forensic---Valut-/)
 
-> **Login with:** Username: `admin` &nbsp;|&nbsp; Password: `admin123`
+> **Demo Credentials:** Username: `admin` &nbsp;|&nbsp; Password: `admin123` *(or click Instant Demo Sign In)*
 
 ---
 
@@ -95,18 +95,18 @@ http://127.0.0.1:5000
 
 ---
 
-## ▶️ Run the Live Demo
+## ▶️ Live Demo
 
-The demo is hosted on **Replit** — no installation needed. Just open the link and log in:
+Experience the full interactive ForensicVault application directly in your browser:
 
-🔗 **[https://forensicvault.replit.app](https://forensicvault.replit.app)**
+🔗 **[https://jobel26093.github.io/Forensic---Valut-/](https://jobel26093.github.io/Forensic---Valut-/)**
 
 | Field | Value |
 |-------|-------|
 | Username | `admin` |
 | Password | `admin123` |
 
-> The demo link is **permanent** — it stays the same even when the project is updated.
+> 💡 **Permanent & Live:** Hosted directly through GitHub Pages. Any changes committed to this repository are automatically deployed to the exact same URL without interruption.
 
 ---
 
@@ -115,22 +115,24 @@ The demo is hosted on **Replit** — no installation needed. Just open the link 
 ```
 forensic_project/
 │
-├── app.py                  # Main Flask app — all routes and logic
+├── app.py                  # Main Flask app — all backend routes and logic
 ├── requirements.txt        # Python dependencies (flask, reportlab, gunicorn)
-├── Procfile                # Render/Heroku process definition
-├── render.yaml             # Render deployment config
-├── package.json            # npm shim (optional — runs python app.py)
+├── package.json            # npm shim (runs python app.py via npm run dev)
+├── docs/                   # Live in-browser demo (GitHub Pages deployment)
+│   └── index.html
+├── .github/workflows/      # Automated GitHub Pages CI/CD workflow
+│   └── pages.yml
 │
-├── uploads/                # Uploaded evidence files
+├── uploads/                # Uploaded evidence files directory
 │
 └── templates/              # Jinja2 HTML templates
-    ├── base.html           # Shared layout: navbar, flash toasts
-    ├── login.html          # Authentication page
-    ├── index.html          # Dashboard with live stats
-    ├── upload.html         # Upload evidence with drag & drop
-    ├── verify.html         # File integrity checker
-    ├── fingerprint.html    # Multi-hash generator
-    └── logs.html           # Evidence records table
+    ├── base.html           # Shared layout: navbar, flash toasts, design system
+    ├── login.html          # Authentication page (split-view)
+    ├── index.html          # Dashboard with live stats & metrics
+    ├── upload.html         # Evidence upload with drag & drop
+    ├── verify.html         # Cryptographic integrity checker
+    ├── fingerprint.html    # Multi-hash generator (MD5, SHA-1, SHA-256)
+    └── logs.html           # Evidence chain records table with search & delete
 ```
 
 ---
